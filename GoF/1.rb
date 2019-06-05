@@ -2,23 +2,22 @@ def get_vehicle
   Vehicle.new
 end
 
-class Vehicle
-  def travel(distance)
-    "I traveld #{distance} km."
+class Engine
+  def start
+    puts "started"
   end
-
-  def start_engine
-    puts "engine has started"
-  end
-  def stop_engine
-    puts "engine has stopped"
+  def stop
+    puts "stopped"
   end
 end
 
-class Car < Vehicle
+class Car
+  def initialize
+    @engine = Engine.new
+  end
   def sunday_drive
-    start_engine
-    # driving...
-    stop_engine
+    @engine.start
+    # boooooom
+    @engine.stop
   end
-end
+  end
