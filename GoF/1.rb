@@ -11,10 +11,24 @@ class Engine
   end
 end
 
+class DieselEngine < Engine
+end
+class GasolineEngine < Engine
+end
+
 class Car
-  def initialize
-    @engine = Engine.new
+  def initialize(engine)
+    @engine = engine
   end
+
+  def switch_to_diesel
+    @engine = DieselEngine.new
+  end
+
+  def switch_to_gasoline
+    @engine = GasolineEngine.new
+  end
+
   def sunday_drive
     @engine.start
     # boooooom
