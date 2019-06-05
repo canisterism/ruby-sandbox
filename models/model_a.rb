@@ -10,4 +10,14 @@ class ModelA
     end
   end
 
+  def hoge
+    puts "This is instance method calling hoge (class method)"
+    puts "self.class: #{self.class}"
+    self.class.class_method
+  end
+
+  def self.class_method
+    "hoge"
+  end
+
 end

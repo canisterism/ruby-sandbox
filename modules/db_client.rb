@@ -1,18 +1,22 @@
 require "./gems/client.rb"
 
-module SqlClient
+module DbClient
 
   def client
     @client ||= make_client
-    @client
   end
+
+  def module_class_method
+    puts "this is module_class_method"
+  end
+
+  module_function :module_class_method
 
   private
 
   def make_client
     puts "create new client"
-    client = Mysql2::Client.new("localhost")
-    client
+    client = Client.new("localhost")
   end
 
 end
