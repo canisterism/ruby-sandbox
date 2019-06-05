@@ -7,39 +7,29 @@ class Report
   attr_reader :title, :text
   attr_accessor :formatter
 
-  def initialize(formatter)
+  def initialize(&formatter)
     @title = '月次報告'
     @text = ['晴天なう','ぽんぽんぺいん']
     @formatter = formatter
   end
 
   def output_report
-    @formatter.output_report(self)
+    @formatter.call(self)
   end
 end
 
-class Formatter
-  def output_report(context)
-    raise 'Called abstract method: output_title'
+HTML_FORMATTER = lambda do |context|
+  puts "<title>#{context.title}</title>"
+  puts '<body>'
+  context.text.each do |line|
+    puts "<p>#{line}</p>"
   end
+  puts '</body>'
 end
 
-class HTMLFormatter < Formatter
-  def output_report(context)
-    puts "<title>#{context.title}</title>"
-    puts '<body>'
-    context.text.each do |line|
-      puts "<p>#{line}</p>"
-    end
-    puts '</body>'
-  end
-end
-
-class PlainTextFormatter < Formatter
-  def output_report(context)
-    puts("***#{context.title}***")
-    context.text.each do |line|
-      puts("***#{line}***")
-    end
+PLAIN_TEXT_FORMATTER = lambda do |context|
+  puts("***#{context.title}***")
+  context.text.each do |line|
+    puts("***#{line}***")
   end
 end
