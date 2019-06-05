@@ -1,73 +1,45 @@
-# Template Method
-## 変わらない部分だけ親クラスに定義する
-### 変わる部分は子クラスに
+# Strategry Pattern
+## ストラテジは同じインターフェースを持ち、同じ仕事をこなす
+### クラスの外部からはストラテジオブジェクトは同じに見えて、、利用者(context)からはこれが取り替え可能なパーツとになる
 
 class Report
-  def initialize
+
+  attr_reader :title, :text
+  attr_accessor :formatter
+
+  def initialize(formatter)
     @title = '月次報告'
     @text = ['晴天なう','ぽんぽんぺいん']
+    @formatter = formatter
   end
 
   def output_report
-    output_title
-    output_body_start
-    output_body
-    output_body_end
+    @formatter.output_report(self)
   end
+end
 
-  # abstract methods
-  def output_title
+class Formatter
+  def output_report(context)
     raise 'Called abstract method: output_title'
   end
-
-  def output_body
-    raise 'Called abstract method: output_body'
-  end
-
-  def output_body_start
-  end
-  def output_body_end
-  end
-
 end
 
-class HTTPReport < Report
-
-  def output_title
-    puts "<title>#{@title}</title>"
-  end
-
-  def output_text
-    @text.each do |line|
+class HTMLFormatter < Formatter
+  def output_report(context)
+    puts "<title>#{context.title}</title>"
+    puts '<body>'
+    context.text.each do |line|
       puts "<p>#{line}</p>"
     end
-  end
-
-  def output_body_start
-    puts "<body>"
-  end
-
-
-  def output_body_end
-    puts "</body>"
+    puts '</body>'
   end
 end
 
-class PlainReport < Report
-  def output_title
-    puts "***#{@title}***"
-  end
-
-  def output_text
-    @text.each do |line|
-      puts "***#{@title}***"
+class PlainTextFormatter < Formatter
+  def output_report(context)
+    puts("***#{context.title}***")
+    context.text.each do |line|
+      puts("***#{line}***")
     end
   end
-end
-
-
-
-
-
-
 end
