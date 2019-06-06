@@ -1,31 +1,12 @@
 # Observer
 ## Aに変更があった時にBに通知する仕組み。
 
-# ダメ
-
-class Employee
-  attr_reader :name, :salary
-  attr_accessor :title
-
-  def initialize(name, title, salary, observers=[])
-    @name = name
-    @title = title
-    @salary = salary
-    @observers = observers
+module Subject
+  def initialize
+    @observers = []
   end
 
-  def salary=(new_salary)
-    @salary = new_salary
-    notify_observers
-  end
-
-  def notify_observers
-    @observers.each do |observer|
-      observer.update(self)
-    end
-  end
-
-  def add_observer(observer)
+  def add_observer(&observer)
     @observers << observer
   end
 
@@ -33,11 +14,31 @@ class Employee
     @observers.delete(observer)
   end
 
+  def notify_observers
+    @observers.each do |observer|
+      observer.call(self)
+    end
+  end
+
+  # e.add_observer do |changed_employee|
+  #   puts "cut a new check for #{changed_employee.name}"
+  #   puts "His salary is now #{changed_employee.salary}"
+  # end
+
 end
 
-class Payroll
-  def update(changed_employee)
-    puts "#{changed_employee.name}のために小切手を切ります"
-    puts "#{changed_employee.salary}円になりました"
+class Employee
+  include Subject
+  attr_reader :name, :salary
+
+  def initialize(name, salary)
+    super()
+    @name = name
+    @salary = salary
+  end
+
+  def salary=(new_salary)
+    @salary = new_salary
+    notify_observers
   end
 end
