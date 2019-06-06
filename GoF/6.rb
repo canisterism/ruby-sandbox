@@ -15,6 +15,12 @@ class Task
   def get_time_required
     0.0
   end
+
+  # Leafの基底クラスには1を返すクラス
+  def total_number_basic_tasks
+    1
+  end
+
 end
 
 # Leaf
@@ -75,6 +81,13 @@ class CompositeTask < Task
     time = 0.0
     @sub_tasks.each { |task| time += task.get_time_required }
     time
+  end
+
+  # Compositeの基底クラスには再帰的探索を書く
+  def total_number_basic_tasks
+    total = 0
+    @sub_tasks.each {|task| total += task.total_number_basic_tasks }
+    total
   end
 
 end
